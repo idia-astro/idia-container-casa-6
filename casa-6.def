@@ -3,7 +3,7 @@ MirrorURL: http://archive.ubuntu.com/ubuntu/
 OSVersion: bionic
 Include: software-properties-common
 
-%label
+%labels
 
         APPLICATION_NAME Ubuntu LTS + CASA 6
         OS_VERSION 18.04
@@ -16,8 +16,22 @@ Include: software-properties-common
         AUTHOR_NAME Jeremy Smith
         AUTHOR_EMAIL jeremy@idia.ac.za
 
-%environment
+# paths to download wheels that are needed:
+# https://casa-pip.nrao.edu/repository/pypi-casa-release/packages/casatools/6.1.2.7/casatools-6.1.2.7-cp36-cp36m-linux_x86_64.whl
+# https://casa-pip.nrao.edu/repository/pypi-casa-release/packages/casatasks/6.1.2.7/casatasks-6.1.2.7-py3-none-any.whl
+# https://casa-pip.nrao.edu/repository/pypi-casa-release/packages/casampi/0.3.0/casampi-0.3.0-py3-none-any.whl
 
+# https://casa-pip.nrao.edu/repository/pypi-casa-release/packages/casaviewer/1.0.13/casaviewer-1.0.13-py3-none-linux_x86_64.whl
+# https://casa-pip.nrao.edu/repository/pypi-casa-release/packages/casaplotms/1.0.25/casaplotms-1.0.25-py3-none-linux_x86_64.whl
+
+%files
+        casatools-6.1.2.7-cp36-cp36m-linux_x86_64.whl /opt/
+        casatasks-6.1.2.7-py3-none-any.whl /opt/
+        casampi-0.3.0-py3-none-any.whl /opt/
+        casaviewer-1.0.13-py3-none-linux_x86_64.whl /opt/
+        casaplotms-1.0.25-py3-none-linux_x86_64.whl /opt/
+
+%environment
         export PATH=/anaconda3/bin:${PATH}
 
 %post
@@ -61,15 +75,16 @@ Include: software-properties-common
         pip install --upgrade numpy scikit-image
         pip install astropy pyfits bdsf matplotlib
 
+
         # Install CASA 6
-        apt-get install -y libopenmpi-dev
-        pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casatools
-        pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casatasks
-        pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casampi
+#        apt-get install -y libopenmpi-dev
+        pip install /opt/casatools-6.1.2.7-cp36-cp36m-linux_x86_64.whl
+        pip install /opt/casatasks-6.1.2.7-py3-none-any.whl
+        pip install /opt/casampi-0.3.0-py3-none-any.whl
 
         # Install unvalidated packages
-        pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casaviewer
-        pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casaplotms
+        pip install /opt/casaviewer-1.0.13-py3-none-linux_x86_64.whl
+        pip install /opt/casaplotms-1.0.25-py3-none-linux_x86_64.whl
 
         # Fix command prompt in Singularity 3.5.2
         printf 'export PS1="\u@$SINGULARITY_NAME:\w$ "' > /.singularity.d/env/999-psvars.sh
