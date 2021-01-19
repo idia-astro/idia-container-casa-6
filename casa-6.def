@@ -24,12 +24,16 @@ Include: software-properties-common
 # https://casa-pip.nrao.edu/repository/pypi-casa-release/packages/casaviewer/1.0.13/casaviewer-1.0.13-py3-none-linux_x86_64.whl
 # https://casa-pip.nrao.edu/repository/pypi-casa-release/packages/casaplotms/1.0.25/casaplotms-1.0.25-py3-none-linux_x86_64.whl
 
+# path to openmpi
+# https://download.open-mpi.org/release/open-mpi/v4.0/openmpi-4.0.5.tar.bz
+
 %files
         casatools-6.1.2.7-cp36-cp36m-linux_x86_64.whl /opt/
         casatasks-6.1.2.7-py3-none-any.whl /opt/
         casampi-0.3.0-py3-none-any.whl /opt/
         casaviewer-1.0.13-py3-none-linux_x86_64.whl /opt/
         casaplotms-1.0.25-py3-none-linux_x86_64.whl /opt/
+        openmpi-4.0.5.tar.bz2 /opt/
 
 %environment
         export PATH=/anaconda3/bin:${PATH}
@@ -50,7 +54,8 @@ Include: software-properties-common
 
         # Install OpenMPI
 	cd /opt
-	wget -O - https://download.open-mpi.org/release/open-mpi/v4.0/openmpi-4.0.5.tar.bz2 | tar jz
+        tar -jx openmpi-4.0.5.tar.bz2
+#	wget -O -  https://download.open-mpi.org/release/open-mpi/v4.0/openmpi-4.0.5.tar.bz2 | tar jz
         cd openmpi-4.0.5
         ./configure
         make all install
@@ -96,6 +101,14 @@ Include: software-properties-common
         # Cleanup the container
         apt-get clean
         apt-get autoclean
+
+        cd /opt
+        rm openmpi-4.0.5.tar.bz2 \
+          casatools-6.1.2.7-cp36-cp36m-linux_x86_64.whl \
+          casatasks-6.1.2.7-py3-none-any.whl \
+          casampi-0.3.0-py3-none-any.whl \
+          casaviewer-1.0.13-py3-none-linux_x86_64.whl \
+          casaplotms-1.0.25-py3-none-linux_x86_64.whl
 
 %runscript
 
