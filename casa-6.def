@@ -35,6 +35,9 @@ Include: software-properties-common
         export PATH=/anaconda3/bin:${PATH}
 
 %post
+        # Get and set some system information to speed up compilation
+        NUM_CPUS=$(grep -c ^processor /proc/cpuinfo)
+        MAKEFLAGS="-j ${NUM_CPUS}"
 
         # Create Installation Directories and export paths. This is needed as part of post.
         # %environment scriptlet does not define these paths during %post, only after.
@@ -46,8 +49,8 @@ Include: software-properties-common
 
         # Install OpenMPI
 	cd /opt
-	wget -O -  https://download.open-mpi.org/release/open-mpi/v4.1/openmpi-4.1.0.tar.gz | tar xz
-        cd openmpi-4.1.0
+	wget -O - https://download.open-mpi.org/release/open-mpi/v4.0/openmpi-4.0.5.tar.bz2 | tar xz
+        cd openmpi-4.0.5
         ./configure
         make all install
         ldconfig
@@ -63,28 +66,28 @@ Include: software-properties-common
         conda install -y python==3.6.8	
 
         # Update pip and install python packages
-        pip install --upgrade pip
-        pip install --upgrade cloudpickle holoviews datashader bokeh pandas dask-ms[xarray] scipy
+        pip install --no-cache-dir --upgrade pip
+        pip install --no-cache-dir --upgrade cloudpickle holoviews datashader bokeh pandas dask-ms[xarray] scipy
         conda install -y -c conda-forge phantomjs        
 
         # Install Jupyter for IPykernel
-        pip install jupyter ipykernel
+        pip install --no-cache-dir jupyter ipykernel
 
         # Install PyBDSF
         apt-get install -y libboost-python-dev libboost-numpy-dev python-setuptools
-        pip install --upgrade numpy scikit-image
-        pip install astropy pyfits bdsf matplotlib
+        pip install --no-cache-dir --upgrade numpy scikit-image
+        pip install --no-cache-dir astropy pyfits bdsf matplotlib
 
 
         # Install CASA 6
 #        apt-get install -y libopenmpi-dev
-        pip install /opt/casatools-6.1.2.7-cp36-cp36m-linux_x86_64.whl
-        pip install /opt/casatasks-6.1.2.7-py3-none-any.whl
-        pip install /opt/casampi-0.3.0-py3-none-any.whl
+        pip install --no-cache-dir /opt/casatools-6.1.2.7-cp36-cp36m-linux_x86_64.whl
+        pip install --no-cache-dir /opt/casatasks-6.1.2.7-py3-none-any.whl
+        pip install --no-cache-dir /opt/casampi-0.3.0-py3-none-any.whl
 
         # Install unvalidated packages
-        pip install /opt/casaviewer-1.0.13-py3-none-linux_x86_64.whl
-        pip install /opt/casaplotms-1.0.25-py3-none-linux_x86_64.whl
+        pip install --no-cache-dir /opt/casaviewer-1.0.13-py3-none-linux_x86_64.whl
+        pip install --no-cache-dir /opt/casaplotms-1.0.25-py3-none-linux_x86_64.whl
 
         # Fix command prompt in Singularity 3.5.2
         printf 'export PS1="\u@$SINGULARITY_NAME:\w$ "' > /.singularity.d/env/999-psvars.sh
