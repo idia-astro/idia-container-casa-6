@@ -44,12 +44,13 @@ Include: software-properties-common
 
         # Installation of initial packages
         apt-get update -y
+        apt-get upgrade -y
         add-apt-repository universe
         apt-get install -y wget vim apt-utils git bzip2 build-essential gfortran libgfortran3 xvfb ghostscript curl pkg-config
 
         # Install OpenMPI
 	cd /opt
-	wget -O - https://download.open-mpi.org/release/open-mpi/v4.0/openmpi-4.0.5.tar.bz2 | tar xz
+	wget -O - https://download.open-mpi.org/release/open-mpi/v4.0/openmpi-4.0.5.tar.bz2 | tar jz
         cd openmpi-4.0.5
         ./configure
         make all install
