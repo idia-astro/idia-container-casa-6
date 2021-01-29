@@ -28,19 +28,23 @@ Include: software-properties-common
         # Installation of initial packages
         apt-get update -y
         add-apt-repository universe
-        apt-get install -y wget vim apt-utils git bzip2 build-essential gfortran libgfortran3 xvfb ghostscript curl pkg-config
-
+        add-apt-repository multiverse
+        add-apt-repository restricted
+        add-apt-repository -s ppa:kernsuite/kern-6
+        apt-get update -y
+        apt-get install -y wget vim apt-utils git bzip2 build-essential gfortran libgfortran3 xvfb ghostscript curl pkg-config libxi-dev libfuse-dev
+        apt-get install -y casacore-dev casacore-data
         # Install OpenMPI
-	cd /opt
-	wget -O -  https://download.open-mpi.org/release/open-mpi/v4.1/openmpi-4.1.0.tar.gz | tar xz
-        cd openmpi-4.1.0
-        ./configure
-        make all install
-        ldconfig
+	#cd /opt
+	#wget -O -  https://download.open-mpi.org/release/open-mpi/v4.1/openmpi-4.1.0.tar.gz | tar xz
+        #cd openmpi-4.1.0
+        #./configure
+        #make all install
+        #ldconfig
 
 	# Install Anaconda for python package management
         cd /opt
-        wget https://repo.continuum.io/archive/Anaconda3-5.2.0-Linux-x86_64.sh
+        wget https://repo.anaconda.com/archive/Anaconda3-5.2.0-Linux-x86_64.sh
         bash Anaconda3-5.2.0-Linux-x86_64.sh -b -p /anaconda3
         rm Anaconda3-5.2.0-Linux-x86_64.sh
         export PATH="/anaconda3/bin:$PATH"
@@ -51,6 +55,7 @@ Include: software-properties-common
         # Update pip and install python packages
         pip install --upgrade pip
         pip install --upgrade cloudpickle holoviews datashader bokeh pandas dask-ms[xarray] scipy
+        pip install --no-binary :all: python-casacore
         conda install -y -c conda-forge phantomjs        
 
         # Install Jupyter for IPykernel
@@ -70,6 +75,7 @@ Include: software-properties-common
         # Install unvalidated packages
         pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casaviewer
         pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casaplotms
+	pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casashell
 
         # Fix command prompt in Singularity 3.5.2
         printf 'export PS1="\u@$SINGULARITY_NAME:\w$ "' > /.singularity.d/env/999-psvars.sh
