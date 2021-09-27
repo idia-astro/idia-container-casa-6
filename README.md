@@ -21,7 +21,7 @@
 - python-setuptools
 - libopenmpi-dev
 
-### Python:
+### Python (latest available & stable versions if not specified):
 - cloudpickle 
 - holoviews
 - datashader 
