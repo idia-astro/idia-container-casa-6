@@ -3,18 +3,18 @@ MirrorURL: http://archive.ubuntu.com/ubuntu/
 OSVersion: bionic
 Include: software-properties-common
 
-# %label
+%label
 
-#         APPLICATION_NAME Ubuntu LTS + CASA 6
-#         OS_VERSION 18.04
-#         APPLICATION_URL https://casa.nrao.edu/casadocs/latest/usingcasa/obtaining-and-installing
+        APPLICATION_NAME Ubuntu LTS + CASA 6
+        OS_VERSION 18.04
+        APPLICATION_URL https://casa.nrao.edu/casadocs/latest/usingcasa/obtaining-and-installing
 
-#         SYSTEM_NAME iLifu
-#         SYSTEM_SINGULARITY_VERSION 2.6
-#         SYSTEM_URL http://www.ilifu.ac.za
+        SYSTEM_NAME iLifu
+        SYSTEM_SINGULARITY_VERSION 3.5.2
+        SYSTEM_URL http://www.ilifu.ac.za
 
-#         AUTHOR_NAME Jeremy Smith
-#         AUTHOR_EMAIL jeremy@idia.ac.za
+        AUTHOR_NAME IDIA
+        AUTHOR_EMAIL support@ilifu.ac.za
 
 %environment
 
