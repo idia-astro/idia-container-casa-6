@@ -1,0 +1,100 @@
+Bootstrap: debootstrap
+MirrorURL: http://archive.ubuntu.com/ubuntu/
+OSVersion: bionic
+Include: software-properties-common
+
+# %label
+
+#         APPLICATION_NAME Ubuntu LTS + CASA 6
+#         OS_VERSION 18.04
+#         APPLICATION_URL https://casa.nrao.edu/casadocs/latest/usingcasa/obtaining-and-installing
+
+#         SYSTEM_NAME iLifu
+#         SYSTEM_SINGULARITY_VERSION 2.6
+#         SYSTEM_URL http://www.ilifu.ac.za
+
+#         AUTHOR_NAME Jeremy Smith
+#         AUTHOR_EMAIL jeremy@idia.ac.za
+
+%environment
+
+        export PATH=/anaconda3/bin:${PATH}
+        export PYTHONPATH=$PYTHONPATH:/opt/casaaddons
+	export XDG_RUNTIME_DIR=$HOME
+
+%post
+
+        # Create Installation Directories and export paths. This is needed as part of post.
+        # %environment scriptlet does not define these paths during %post, only after.
+
+        # Installation of initial packages
+        apt-get update -y
+        add-apt-repository universe
+        add-apt-repository multiverse
+        add-apt-repository restricted
+        add-apt-repository -s ppa:kernsuite/kern-6
+        apt-get update -y
+        apt-get install -y wget vim apt-utils git bzip2 build-essential gfortran libgfortran3 xvfb ghostscript curl pkg-config libxi-dev libfuse-dev
+        apt-get install -y casacore-dev casacore-data
+        # Install OpenMPI
+	#cd /opt
+	#wget -O -  https://download.open-mpi.org/release/open-mpi/v4.1/openmpi-4.1.0.tar.gz | tar xz
+        #cd openmpi-4.1.0
+        #./configure
+        #make all install
+        #ldconfig
+
+	# Install Anaconda for python package management
+        cd /opt
+        wget https://repo.anaconda.com/archive/Anaconda3-5.2.0-Linux-x86_64.sh
+        bash Anaconda3-5.2.0-Linux-x86_64.sh -b -p /anaconda3
+        rm Anaconda3-5.2.0-Linux-x86_64.sh
+        export PATH="/anaconda3/bin:$PATH"
+
+        # Update python to 3.6.8 for compatibility with PyBDSF
+        conda install -y python==3.6.8	
+
+        #remove distutil install conflict
+        rm -r /anaconda3/lib/python3.6/site-packages/llvmlite*
+        # Update pip and install python packages
+        pip install --upgrade pip
+        pip install --upgrade cloudpickle holoviews datashader bokeh pandas dask-ms[xarray] scipy
+        pip install --no-binary :all: python-casacore
+        # conda install --channel defaults conda python=3.6.8 --yes
+        # conda update --channel defaults --all --yes
+        # conda install -y -c conda-forge phantomjs        
+
+        # Install Jupyter for IPykernel
+        pip install jupyter ipykernel
+
+        # Install PyBDSF
+        apt-get install -y libboost-python-dev libboost-numpy-dev python-setuptools
+        pip install --upgrade numpy scikit-image
+        pip install --use-deprecated=legacy-resolver astropy==4.1 bdsf matplotlib katdal astroquery
+        # apt-get install libgeos-3.6.2 libgeos-c1v5 libgeos-dev
+
+        # Install CASA 6
+        apt-get install -y libopenmpi-dev
+        pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casatools
+        pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casatasks
+        pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casampi
+        pip install --index-url=https://go.nrao.edu/pypi casadata
+
+        # Install unvalidated packages
+        pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casaviewer
+        pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casaplotms
+	pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casashell
+
+        cd /opt
+        git clone https://open-bitbucket.nrao.edu/scm/casa/casaaddons.git
+
+        # Fix command prompt in Singularity 3.5.2
+        printf 'export PS1="\u@$SINGULARITY_NAME:\w$ "' > /.singularity.d/env/999-psvars.sh
+
+        # Cleanup the container
+        apt-get clean
+        apt-get autoclean
+
+%runscript
+
+	python "$@"
