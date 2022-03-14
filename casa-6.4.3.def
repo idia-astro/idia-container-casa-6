@@ -1,14 +1,9 @@
-Bootstrap: debootstrap
-MirrorURL: http://archive.ubuntu.com/ubuntu/
-OSVersion: bionic
-Include: software-properties-common
-
-# BootStrap: docker
-# From: ubuntu:20.04
+BootStrap: docker
+From: ubuntu:20.04
 
 %labels
         APPLICATION_NAME Ubuntu LTS + CASA 6
-        OS_VERSION 18.04
+        OS_VERSION 20.04
         APPLICATION_URL https://casa.nrao.edu/casadocs/latest/usingcasa/obtaining-and-installing
 
         SYSTEM_NAME iLifu
@@ -20,12 +15,11 @@ Include: software-properties-common
 
 %environment
 
-        export PATH=/anaconda3/bin:${PATH}
         export PYTHONPATH=$PYTHONPATH:/opt/casaaddons
 	export XDG_RUNTIME_DIR=$HOME
 
 %post
-        # apt-get install -y python-is-python3
+
         # Create Installation Directories and export paths. This is needed as part of post.
         # %environment scriptlet does not define these paths during %post, only after.
         mkdir -p /opt
@@ -46,27 +40,14 @@ Include: software-properties-common
         #cd openmpi-4.1.0
         #./configure
         #make all install
-        #ldconfig
-
-	# Install Anaconda for python package management
-        cd /opt
-        wget https://repo.anaconda.com/archive/Anaconda3-5.2.0-Linux-x86_64.sh
-        bash Anaconda3-5.2.0-Linux-x86_64.sh -b -p /anaconda3
-        rm Anaconda3-5.2.0-Linux-x86_64.sh
-        export PATH="/anaconda3/bin:$PATH"
-
-        # Update python to 3.6.8 for compatibility with PyBDSF
-        conda install -y python==3.6.8	
+        #ldconfig	
 
         # #remove distutil install conflict
         # rm -r /anaconda3/lib/python3.6/site-packages/llvmlite*
         # Update pip and install python packages
         apt-get install -y python3-pip
         pip install --upgrade cloudpickle holoviews datashader bokeh pandas dask-ms[xarray] scipy
-        pip install --no-binary :all: python-casacore
-        # conda install --channel defaults conda python=3.6.8 --yes
-        # conda update --channel defaults --all --yes
-        # conda install -y -c conda-forge phantomjs        
+        pip install --no-binary :all: python-casacore      
 
         # Install Jupyter for IPykernel
         pip install jupyter ipykernel
@@ -86,9 +67,6 @@ Include: software-properties-common
         pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casampi
         pip install --index-url=https://go.nrao.edu/pypi casadata
 
-        # wget https://github.com/protocolbuffers/protobuf/releases/download/v3.12.4/protobuf-all-3.12.4.tar.gz
-        # tar -xzf protobuf-all-3.12.4.tar.gz
-        # cd protobuf-3.12.4/ && ./configure && make && make install
         pip install protobuf
         # Install unvalidated packages
         pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casaviewer
