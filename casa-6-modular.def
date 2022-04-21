@@ -29,24 +29,15 @@ From: ubuntu:20.04
         apt-get update -y
         apt-get install -y software-properties-common
         apt-get install -y wget vim apt-utils git build-essential bzip2 libpng-dev gfortran gfortran xvfb ghostscript curl pkg-config libxi-dev libfuse-dev python-is-python3
-        add-apt-repository universe
-        add-apt-repository multiverse
-        add-apt-repository restricted
+        add-apt-repository -y universe
+        add-apt-repository -y multiverse
+        add-apt-repository -y restricted
         add-apt-repository -s ppa:kernsuite/kern-7
-        apt-get install -y casacore-dev casacore-data
-        # Install OpenMPI
-	#cd /opt
-	#wget -O -  https://download.open-mpi.org/release/open-mpi/v4.1/openmpi-4.1.0.tar.gz | tar xz
-        #cd openmpi-4.1.0
-        #./configure
-        #make all install
-        #ldconfig	
+        apt-get install -y casacore-dev casacore-data	
 
-        # #remove distutil install conflict
-        # rm -r /anaconda3/lib/python3.6/site-packages/llvmlite*
         # Update pip and install python packages
         apt-get install -y python3-pip
-        pip install --upgrade cloudpickle holoviews datashader bokeh pandas dask-ms[xarray] scipy
+        pip install --upgrade cloudpickle holoviews datashader bokeh pandas dask-ms[xarray] scipy protobuf
         pip install --no-binary :all: python-casacore      
 
         # Install Jupyter for IPykernel
@@ -55,23 +46,21 @@ From: ubuntu:20.04
         # Install PyBDSF
         apt-get install -y libboost-python-dev libboost-numpy-dev python-setuptools
         pip install --upgrade numpy scikit-image
-        # pip install --use-deprecated=legacy-resolver astropy==4.1 bdsf matplotlib katdal astroquery
         pip install astropy==4.1 bdsf matplotlib katdal astroquery
         apt-get install -y pybdsf
-        # apt-get install libgeos-3.6.2 libgeos-c1v5 libgeos-dev
 
         # Install CASA 6
         apt-get install -y libopenmpi-dev
-        pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casatools
-        pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casatasks
-        pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casampi
-        pip install --index-url=https://go.nrao.edu/pypi casadata
-
-        pip install protobuf
+        pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casatools==6.4.4.31
+        pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casatasks==6.4.4.31
+        pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple almatasks==1.5.2
+        pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casampi==0.4.3
+        pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casadata==2022.3.28
+        pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casaplotserver==1.2.1
         # Install unvalidated packages
-        pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casaviewer
-        pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casaplotms
-	pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casashell
+        pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casaplotms==1.5.5
+        pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casaviewer==1.5.2
+        pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casashell==6.4.4.31
 
         cd /opt
         git clone https://open-bitbucket.nrao.edu/scm/casa/casaaddons.git
