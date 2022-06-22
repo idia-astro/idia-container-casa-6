@@ -18,6 +18,7 @@ From: ubuntu:20.04
         export PYTHONPATH=$PYTHONPATH:/opt/casaaddons
 	export XDG_RUNTIME_DIR=$HOME
         export PATH=$PATH:/opt/casaplotms/usr/bin
+        export CASARCFILES=/opt/.casarc
 
 %post
 
@@ -35,7 +36,7 @@ From: ubuntu:20.04
         add-apt-repository -y multiverse
         add-apt-repository -y restricted
         add-apt-repository -s ppa:kernsuite/kern-7
-        apt-get install -y casacore-dev casacore-data	
+        apt-get install -y casacore-dev casacore-data
 
         # Update pip and install python packages
         apt-get install -y python3-pip
@@ -78,6 +79,9 @@ From: ubuntu:20.04
         mv squashfs-root casaplotms
         chmod -R go+rx /opt/casaplotms
         sed -i -e "s|app_path = __os.path.join( __os.path.abspath( __os.path.join(__os.path.dirname(__file__),\"..\") ), '__bin__/casaplotms-x86_64.AppImage')|app_path = '/opt/casaplotms/usr/bin/casaplotms'|g" /usr/local/lib/python3.8/dist-packages/casaplotms/private/plotmstool.py
+
+        # Fix path to casacore data (https://github.com/casacore/python-casacore/issues/181)
+        echo 'measures.directory: /usr/share/casacore/data' > /opt/.casarc
 
         # Fix command prompt in Singularity 3.5.2
         printf 'export PS1="\u@$SINGULARITY_NAME:\w$ "' > /.singularity.d/env/999-psvars.sh
