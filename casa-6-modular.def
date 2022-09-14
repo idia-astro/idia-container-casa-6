@@ -1,5 +1,6 @@
-BootStrap: docker
-From: ubuntu:20.04
+Bootstrap: debootstrap
+MirrorURL: http://archive.ubuntu.com/ubuntu/
+OSVersion: focal
 
 %labels
         APPLICATION_NAME Ubuntu LTS + CASA 6
@@ -30,48 +31,49 @@ From: ubuntu:20.04
         # Installation of initial packages
         apt-get update -y
         apt-get install -y software-properties-common
-        apt-get install -y wget vim apt-utils git build-essential bzip2 libpng-dev gfortran gfortran xvfb ghostscript curl pkg-config libxi-dev libfuse-dev python-is-python3
-        apt-get install -y fuse
-	add-apt-repository -y universe
-        add-apt-repository -y multiverse
+        add-apt-repository -y universe
         add-apt-repository -y restricted
         add-apt-repository -s ppa:kernsuite/kern-7
+        apt-get update -y
+        apt-get install -y wget vim apt-utils git build-essential bzip2 libpng-dev gfortran gfortran xvfb ghostscript curl pkg-config libxi-dev libfuse-dev python-is-python3
+        apt-get install -y fuse
         apt-get install -y casacore-dev casacore-data
 
         # Update pip and install python packages
         apt-get install -y python3-pip
-        pip install --upgrade cloudpickle holoviews datashader bokeh pandas dask-ms[xarray] scipy protobuf==3.20
-        pip install --no-binary :all: python-casacore
-        pip install pyvirtualdisplay
+        python -m pip install --upgrade cloudpickle holoviews datashader bokeh pandas dask-ms[xarray] scipy protobuf==3.20
+        python -m pip install --no-binary :all: python-casacore
+        python -m pip install pyvirtualdisplay
 
         # Install Jupyter for IPykernel
-        pip install jupyter ipykernel
+        python -m pip install jupyter ipykernel
 
         # Install PyBDSF
         apt-get install -y libboost-python-dev libboost-numpy-dev python-setuptools
-        pip install --upgrade numpy scikit-image
-        pip install astropy==4.1 bdsf matplotlib katdal astroquery
-        apt-get install -y pybdsf
+        python -m pip install --upgrade numpy scikit-image
+        python -m pip install --upgrade astropy scipy bdsf matplotlib katdal astroquery
+        #apt-get install -y pybdsf
+        python -m pip install bdsf
 
         # Install CASA 6
         apt-get install -y libopenmpi-dev
-        pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casatools==6.5.0.15
-        pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casatasks==6.5.0.15
-        pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple almatasks==1.5.2
-        pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casampi==0.5.0
-        pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casadata==2022.5.23
-        pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casaplotserver==1.2.1
-        pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casatestutils==6.5.0.15
+        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casatools==6.5.0.15
+        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casatasks==6.5.0.15
+        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple almatasks==1.5.2
+        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casampi==0.5.0
+        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casadata==2022.5.23
+        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casaplotserver==1.2.1
+        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casatestutils==6.5.0.15
         # Install unvalidated packages
-        pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casaplotms==1.6.2
-        pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casaviewer==1.5.2
-        pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casashell==6.5.0.15
+        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casaplotms==1.6.2
+        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casaviewer==1.5.2
+        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casashell==6.5.0.15
 
         cd /opt
         git clone https://open-bitbucket.nrao.edu/scm/casa/casaaddons.git
 
         # Instal katbeam
-        pip install git+https://github.com/ska-sa/katbeam
+        python -m pip install git+https://github.com/ska-sa/katbeam
 
         # Extract and fix casaplotms due to FUSE issues
         cd /opt
