@@ -38,10 +38,18 @@
 - matplotlib 
 - katdal
 
-### CASA 6.4:
+### CASA 6.5:
 - casatools
 - casatasks
 - casampi
 - casaviewer
 - casaplotms
 - casashell
+- almatasks
+- casadata
+- casaplotserver
+- casatestutils
+- casatablebrowser
+- casalogger
+- casafeather
+- casatelemetry

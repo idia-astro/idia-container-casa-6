@@ -8,7 +8,7 @@ OSVersion: focal
         APPLICATION_URL https://casa.nrao.edu/casadocs/latest/usingcasa/obtaining-and-installing
 
         SYSTEM_NAME iLifu
-        SYSTEM_SINGULARITY_VERSION 3.5.2
+        SYSTEM_SINGULARITY_VERSION 3.9.1
         SYSTEM_URL http://www.ilifu.ac.za
 
         AUTHOR_NAME IDIA
@@ -19,6 +19,10 @@ OSVersion: focal
         export PYTHONPATH=$PYTHONPATH:/opt/casaaddons
 	export XDG_RUNTIME_DIR=$HOME
         export PATH=$PATH:/opt/casaplotms/usr/bin
+        export PATH=$PATH:/opt/casaviewer/usr/bin
+        export PATH=$PATH:/opt/casatablebrowser/usr/bin
+        export PATH=$PATH:/opt/casalogger/usr/bin
+        export PATH=$PATH:/opt/casafeather/usr/bin
         export CASARCFILES=/opt/.casarc
 
 %post
@@ -57,17 +61,20 @@ OSVersion: focal
 
         # Install CASA 6
         apt-get install -y libopenmpi-dev
-        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casatools==6.5.0.15
-        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casatasks==6.5.0.15
-        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple almatasks==1.5.2
-        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casampi==0.5.0
-        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casadata==2022.5.23
-        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casaplotserver==1.2.1
-        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casatestutils==6.5.0.15
-        # Install unvalidated packages
-        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casaplotms==1.6.2
-        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casaviewer==1.5.2
-        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casashell==6.5.0.15
+        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casatools==6.5.5.21
+        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casatasks==6.5.5.21
+        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple almatasks==1.6.1
+        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casampi==0.5.3
+        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casadata==2023.4.10
+        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casaplotserver==1.5.1
+        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casatestutils==6.5.5.21
+        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casaplotms==2.0.1
+        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casaviewer==1.7.1
+        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casashell==6.5.5.21
+        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casatablebrowser==0.0.31
+        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casalogger==1.0.15
+        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casafeather==0.0.18
+        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casatelemetry==1.3.4
 
         cd /opt
         git clone https://open-bitbucket.nrao.edu/scm/casa/casaaddons.git
@@ -75,12 +82,36 @@ OSVersion: focal
         # Instal katbeam
         python -m pip install git+https://github.com/ska-sa/katbeam
 
-        # Extract and fix casaplotms due to FUSE issues
+        # Extract and fix AppImage applications due to FUSE issues
+        # CASAplotMS
         cd /opt
         /usr/local/lib/python3.8/dist-packages/casaplotms/__bin__/casaplotms-x86_64.AppImage --appimage-extract
         mv squashfs-root casaplotms
         chmod -R go+rx /opt/casaplotms
         sed -i -e "s|app_path = __os.path.join( __os.path.abspath( __os.path.join(__os.path.dirname(__file__),\"..\") ), '__bin__/casaplotms-x86_64.AppImage')|app_path = '/opt/casaplotms/usr/bin/casaplotms'|g" /usr/local/lib/python3.8/dist-packages/casaplotms/private/plotmstool.py
+        # CASAviewer
+        /usr/local/lib/python3.8/dist-packages/casaviewer/__bin__/casaviewer-x86_64.AppImage --appimage-extract
+        mv squashfs-root casaviewer
+        chmod -R go+rx /opt/casaviewer
+        sed -i -e "s|app_path = __os.path.join( __os.path.abspath(__os.path.join(__os.path.dirname(__file__),'..')), '__bin__/casaviewer-x86_64.AppImage' )|app_path = '/opt/casaviewer/usr/bin/casaviewer'|g" /usr/local/lib/python3.8/dist-packages/casaviewer/private/config.py
+        #CASAtablebrowser
+        /usr/local/lib/python3.8/dist-packages/casatablebrowser/__bin__/casatablebrowser-x86_64.AppImage --appimage-extract
+        mv squashfs-root casatablebrowser
+        chmod -R go+rx /opt/casatablebrowser
+        sed -i -e "s|app_path = __os.path.abspath(__os.path.dirname(__file__))|app_path = '/opt/casatablebrowser/usr/bin'|g" /usr/local/lib/python3.8/dist-packages/casatablebrowser/__casatablebrowser.py
+        sed -i -e 's|app_path = __os.path.join( app_path, "__bin__","casatablebrowser-x86_64.AppImage" )|app_path = __os.path.join( app_path, "casatablebrowser" )|g' /usr/local/lib/python3.8/dist-packages/casatablebrowser/__casatablebrowser.py
+        #CASAlogger
+        /usr/local/lib/python3.8/dist-packages/casalogger/__bin__/casalogger-x86_64.AppImage --appimage-extract
+        mv squashfs-root casalogger
+        chmod -R go+rx /opt/casalogger
+        sed -i -e "s|app_path = os.path.join(|app_path = '/opt/casalogger/usr/bin/casalogger'|g" /usr/local/lib/python3.8/dist-packages/casalogger/casalogger.py
+        sed -i '31,33d' /usr/local/lib/python3.8/dist-packages/casalogger/casalogger.py
+        #CASAfeather
+        /usr/local/lib/python3.8/dist-packages/casafeather/__bin__/casafeather-x86_64.AppImage --appimage-extract
+        mv squashfs-root casafeather
+        chmod -R go+rx /opt/casafeather
+        sed -i -e "s|app_path = __os.path.join(|app_path = '/opt/casafeather/usr/bin/casafeather'|g" /usr/local/lib/python3.8/dist-packages/casafeather/casafeather.py
+        sed -i '52,54d' /usr/local/lib/python3.8/dist-packages/casafeather/casafeather.py
 
         # Fix path to casacore data (https://github.com/casacore/python-casacore/issues/181)
         echo 'measures.directory: /usr/share/casacore/data' > /opt/.casarc
@@ -95,3 +126,4 @@ OSVersion: focal
 %runscript
 
 	python "$@"
+
