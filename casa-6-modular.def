@@ -45,7 +45,7 @@ OSVersion: focal
 
         # Update pip and install python packages
         apt-get install -y python3-pip
-        python -m pip install --upgrade cloudpickle holoviews datashader bokeh pandas dask-ms[xarray] scipy protobuf==3.20
+        python -m pip install --upgrade cloudpickle holoviews datashader bokeh pandas dask-ms[xarray] scipy protobuf==3.20 scikit-image matplotlib katdal astroquery
         python -m pip install --no-binary :all: python-casacore
         python -m pip install pyvirtualdisplay
 
@@ -53,11 +53,11 @@ OSVersion: focal
         python -m pip install jupyter ipykernel
 
         # Install PyBDSF
-        apt-get install -y libboost-python-dev libboost-numpy-dev python-setuptools
-        python -m pip install --upgrade numpy scikit-image
-        python -m pip install --upgrade astropy scipy bdsf matplotlib katdal astroquery
+        apt-get install -y libboost-python-dev libboost-numpy-dev python-setuptools qt5-default
+        python -m pip install --upgrade numpy==1.23.5 pyfits pywcs PyQt5==5.15.7
+        python -m pip install --upgrade astropy scipy
         #apt-get install -y pybdsf
-        python -m pip install bdsf
+        python -m pip install bdsf[ishell]
 
         # Install CASA 6
         apt-get install -y libopenmpi-dev
