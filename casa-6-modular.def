@@ -5,7 +5,7 @@ OSVersion: focal
 %labels
         APPLICATION_NAME Ubuntu LTS + CASA 6 (Modular)
         OS_VERSION 20.04
-        APPLICATION_URL https://casa.nrao.edu/casadocs/latest/usingcasa/obtaining-and-installing
+        APPLICATION_URL https://casadocs.readthedocs.io/en/stable/notebooks/introduction.html#Modular-Packages
 
         SYSTEM_NAME iLifu
         SYSTEM_SINGULARITY_VERSION 3.9.1
@@ -61,20 +61,20 @@ OSVersion: focal
 
         # Install CASA 6
         apt-get install -y libopenmpi-dev
-        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casatools==6.5.6.22
-        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casatasks==6.5.6.22
+        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casatools==6.6.0.20
+        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casatasks==6.6.0.20
         python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple almatasks==1.7.1
-        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casampi==0.5.3
-        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casadata==2023.6.26
-        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casaplotserver==1.6.1
-        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casatestutils==6.5.6.22
-        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casaplotms==2.1.2
-        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casaviewer==1.8.2
-        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casashell==6.5.6.22
-        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casatablebrowser==0.0.32
-        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casalogger==1.0.16
-        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casafeather==0.0.18
-        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casatelemetry==1.3.4
+        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casampi==0.5.4
+        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casadata==2023.9.25
+        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casaplotserver==1.7.1
+        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casatestutils==6.6.0.20
+        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casaplotms==2.2.4
+        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casaviewer==1.9.1
+        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casashell==6.6.0.20
+        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casatablebrowser==0.0.33
+        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casalogger==1.0.17
+        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casafeather==0.0.20
+        #python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casatelemetry==1.3.4
 
         cd /opt
         git clone https://open-bitbucket.nrao.edu/scm/casa/casaaddons.git
