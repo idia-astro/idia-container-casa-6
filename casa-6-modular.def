@@ -3,7 +3,7 @@ MirrorURL: http://archive.ubuntu.com/ubuntu/
 OSVersion: focal
 
 %labels
-        APPLICATION_NAME Ubuntu LTS + CASA 6
+        APPLICATION_NAME Ubuntu LTS + CASA 6 (Modular)
         OS_VERSION 20.04
         APPLICATION_URL https://casa.nrao.edu/casadocs/latest/usingcasa/obtaining-and-installing
 
@@ -54,25 +54,25 @@ OSVersion: focal
 
         # Install PyBDSF
         apt-get install -y libboost-python-dev libboost-numpy-dev python-setuptools qt5-default
-        python -m pip install --upgrade numpy==1.23.5 pyfits pywcs PyQt5==5.15.7
+        python -m pip install --upgrade numpy pyfits pywcs PyQt5==5.15.7
         python -m pip install --upgrade astropy scipy
         #apt-get install -y pybdsf
         python -m pip install bdsf[ishell]
 
         # Install CASA 6
         apt-get install -y libopenmpi-dev
-        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casatools==6.5.5.21
-        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casatasks==6.5.5.21
-        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple almatasks==1.6.1
+        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casatools==6.5.6.22
+        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casatasks==6.5.6.22
+        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple almatasks==1.7.1
         python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casampi==0.5.3
-        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casadata==2023.4.10
-        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casaplotserver==1.5.1
-        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casatestutils==6.5.5.21
-        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casaplotms==2.0.1
-        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casaviewer==1.7.1
-        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casashell==6.5.5.21
-        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casatablebrowser==0.0.31
-        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casalogger==1.0.15
+        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casadata==2023.6.26
+        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casaplotserver==1.6.1
+        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casatestutils==6.5.6.22
+        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casaplotms==2.1.2
+        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casaviewer==1.8.2
+        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casashell==6.5.6.22
+        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casatablebrowser==0.0.32
+        python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casalogger==1.0.16
         python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casafeather==0.0.18
         python -m pip install --index-url https://casa-pip.nrao.edu/repository/pypi-casa-release/simple casatelemetry==1.3.4
 
@@ -115,6 +115,10 @@ OSVersion: focal
 
         # Fix path to casacore data (https://github.com/casacore/python-casacore/issues/181)
         echo 'measures.directory: /usr/share/casacore/data' > /opt/.casarc
+        
+        # Fix out of date TAI UTC tables (missing information on leap seconds) https://casaguides.nrao.edu/index.php/Fixing_out_of_date_TAI_UTC_tables_(missing_information_on_leap_seconds)
+        #cd /usr/local/lib/python3.8/dist-packages/casadata/__data__
+        #rsync -avz rsync://casa-rsync.nrao.edu/casa-data .
 
         # Fix command prompt in Singularity 3.5.2
         printf 'export PS1="\u@$SINGULARITY_NAME:\w$ "' > /.singularity.d/env/999-psvars.sh
