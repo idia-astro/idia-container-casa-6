@@ -23,6 +23,7 @@ OSVersion: focal
         export PATH=$PATH:/opt/casatablebrowser/usr/bin
         export PATH=$PATH:/opt/casalogger/usr/bin
         export PATH=$PATH:/opt/casafeather/usr/bin
+	export PATH=$PATH:~/.local/bin
         export CASARCFILES=/opt/.casarc
 
 %post
