@@ -38,7 +38,7 @@
 - matplotlib 
 - katdal
 
-### CASA 6.5:
+### CASA 6.7:
 - casatools
 - casatasks
 - casampi
